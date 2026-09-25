@@ -1,26 +1,129 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* matches Reference/Sunzen 2027 沙盘系统 · 示范版.html */
+  --paper: #eef2f1;
+  --paper-raised: #ffffff;
+  --field: #f7faf9;
+  --ink: #16302c;
+  --ink-soft: #5e736f;
+  --ink-faint: #8a9d99;
+  --line: #d3ddda;
+  --line-strong: #b9c7c3;
+
+  --seal: #1e6b5c;
+  --seal-strong: #164e43;
+  --seal-wash: #dcebe6;
+  --jade: #2e8b57;
+  --jade-wash: #ddf1e4;
+  --ochre: #b7791f;
+  --ochre-wash: #fbefd5;
+  --rose: #c0392b;
+  --rose-wash: #f8deda;
+
+  /* the eight-dimension palette: 道法将势器术天地 (plus 拆解 reuses --rose) */
+  --dim-dao: #16302c;
+  --dim-dao-wash: #e4ece9;
+  --dim-fa: #b7791f;
+  --dim-fa-wash: #fbefd5;
+  --dim-jiang: #2563eb;
+  --dim-jiang-wash: #dbeafe;
+  --dim-shi: #a8455c;
+  --dim-shi-wash: #f2e2e6;
+  --dim-qi: #8a7148;
+  --dim-qi-wash: #ece6d8;
+  --dim-shu: #1e6b5c;
+  --dim-shu-wash: #dcebe6;
+  --dim-tian: #0891b2;
+  --dim-tian-wash: #cffafe;
+  --dim-di: #8c5a44;
+  --dim-di-wash: #ece1da;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-field: var(--field);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-seal: var(--seal);
+  --color-seal-strong: var(--seal-strong);
+  --color-seal-wash: var(--seal-wash);
+  --color-jade: var(--jade);
+  --color-jade-wash: var(--jade-wash);
+  --color-ochre: var(--ochre);
+  --color-ochre-wash: var(--ochre-wash);
+  --color-rose: var(--rose);
+  --color-rose-wash: var(--rose-wash);
+
+  --color-dim-dao: var(--dim-dao);
+  --color-dim-dao-wash: var(--dim-dao-wash);
+  --color-dim-fa: var(--dim-fa);
+  --color-dim-fa-wash: var(--dim-fa-wash);
+  --color-dim-jiang: var(--dim-jiang);
+  --color-dim-jiang-wash: var(--dim-jiang-wash);
+  --color-dim-shi: var(--dim-shi);
+  --color-dim-shi-wash: var(--dim-shi-wash);
+  --color-dim-qi: var(--dim-qi);
+  --color-dim-qi-wash: var(--dim-qi-wash);
+  --color-dim-shu: var(--dim-shu);
+  --color-dim-shu-wash: var(--dim-shu-wash);
+  --color-dim-tian: var(--dim-tian);
+  --color-dim-tian-wash: var(--dim-tian-wash);
+  --color-dim-di: var(--dim-di);
+  --color-dim-di-wash: var(--dim-di-wash);
+
+  --font-serif-cn: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --font-sans-cn: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #0f1a18;
+    --paper-raised: #16241f;
+    --field: #1b2b27;
+    --ink: #e4eeeb;
+    --ink-soft: #93a8a3;
+    --ink-faint: #62726e;
+    --line: #2a3d38;
+    --line-strong: #395249;
+    --seal-wash: #1d3a33;
+    --jade-wash: #18352a;
+    --ochre-wash: #3a2f17;
+    --rose-wash: #3d1f1b;
+    --dim-dao-wash: #1e2a27;
+    --dim-fa-wash: #3a2f17;
+    --dim-jiang-wash: #172a4a;
+    --dim-shi-wash: #34121c;
+    --dim-qi-wash: #2c1a0e;
+    --dim-shu-wash: #1d3a33;
+    --dim-tian-wash: #0d2e35;
+    --dim-di-wash: #2a201a;
   }
 }
 
+* {
+  border-color: var(--line);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans-cn);
+  font-size: 15px;
+}
+
+::selection {
+  background: var(--seal-wash);
+  color: var(--seal-strong);
+}
+
+:focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 2px;
 }
