@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminTierRole } from "@/lib/sandbox/dimensions";
 
 const VALID_ROLES = ["employee", "supervisor", "subsidiary_head", "super_admin", "group_md"] as const;
@@ -98,6 +99,31 @@ export async function setProfileDisabled(formData: FormData) {
 
   revalidatePath("/admin/users");
   revalidatePath("/admin/overview");
+}
+
+export async function resetUserPassword(formData: FormData) {
+  const { supabase, viewer } = await getViewer();
+
+  const profileId = String(formData.get("profile_id") ?? "");
+  const newPassword = String(formData.get("new_password") ?? "");
+  if (!profileId) throw new Error("无效的提交内容");
+  if (newPassword.length < 6) throw new Error("新密码至少需要 6 个字符");
+  if (profileId === viewer.id) throw new Error("不能在这里重置自己的密码");
+
+  const { data: target } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", profileId)
+    .maybeSingle();
+  if (!target) throw new Error("找不到该用户");
+
+  if (viewer.role !== "super_admin" && isAdminTierRole(target.role)) {
+    throw new Error("无权限：管理员账号的密码只能由超级管理员重置");
+  }
+
+  const admin = createAdminClient();
+  const { error } = await admin.auth.admin.updateUserById(profileId, { password: newPassword });
+  if (error) throw new Error(error.message);
 }
 
 export async function inviteUser(formData: FormData) {

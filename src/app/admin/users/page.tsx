@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDict } from "@/lib/i18n/dictionary";
 import { getRoleLabel, isAdminTierRole } from "@/lib/sandbox/dimensions";
-import { inviteUser, revokeInvitation, setProfileDisabled, updateProfileAssignment } from "./actions";
+import { inviteUser, resetUserPassword, revokeInvitation, setProfileDisabled, updateProfileAssignment } from "./actions";
 
 type Profile = {
   id: string;
@@ -122,11 +122,11 @@ export default async function AdminUsersPage({
       <div className="overflow-x-auto rounded-lg border border-line bg-paper-raised">
         <table className="w-full table-fixed text-sm">
           <colgroup>
-            <col className="w-[22%]" />
-            <col className="w-[16%]" />
             <col className="w-[20%]" />
+            <col className="w-[14%]" />
             <col className="w-[18%]" />
-            <col className="w-[24%]" />
+            <col className="w-[16%]" />
+            <col className="w-[32%]" />
           </colgroup>
           <thead className="bg-paper-raised text-left text-ink-soft">
             <tr>
@@ -220,22 +220,40 @@ export default async function AdminUsersPage({
                         {isSelf && <input type="hidden" name="role" value={profile.role} />}
                       </form>
                     )}
-                    <div className="flex items-center gap-2">
-                      {editable && (
-                        <button
-                          type="submit"
-                          form={formId}
-                          className="rounded-md bg-seal px-3 py-1 text-xs font-medium text-paper-raised hover:bg-seal-strong"
-                        >
-                          {t.common.save}
-                        </button>
-                      )}
+                    <div className="flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2">
+                        {editable && (
+                          <button
+                            type="submit"
+                            form={formId}
+                            className="rounded-md bg-seal px-3 py-1 text-xs font-medium text-paper-raised hover:bg-seal-strong"
+                          >
+                            {t.common.save}
+                          </button>
+                        )}
+                        {!isSelf && !tierLocked && (
+                          <form action={setProfileDisabled}>
+                            <input type="hidden" name="profile_id" value={profile.id} />
+                            <input type="hidden" name="disabled" value={profile.disabled_at ? "false" : "true"} />
+                            <button type="submit" className="rounded-md border border-line px-2 py-1 text-xs text-ink-soft hover:bg-paper">
+                              {profile.disabled_at ? tu.enableButton : tu.disableButton}
+                            </button>
+                          </form>
+                        )}
+                      </div>
                       {!isSelf && !tierLocked && (
-                        <form action={setProfileDisabled}>
+                        <form action={resetUserPassword} className="flex items-center gap-1">
                           <input type="hidden" name="profile_id" value={profile.id} />
-                          <input type="hidden" name="disabled" value={profile.disabled_at ? "false" : "true"} />
+                          <input
+                            type="text"
+                            name="new_password"
+                            placeholder={tu.resetPasswordPlaceholder}
+                            minLength={6}
+                            required
+                            className="w-24 rounded-md border border-line bg-paper-raised px-2 py-1 text-xs text-ink focus:border-seal focus:outline-none focus:ring-2 focus:ring-seal/20"
+                          />
                           <button type="submit" className="rounded-md border border-line px-2 py-1 text-xs text-ink-soft hover:bg-paper">
-                            {profile.disabled_at ? tu.enableButton : tu.disableButton}
+                            {tu.resetPasswordButton}
                           </button>
                         </form>
                       )}

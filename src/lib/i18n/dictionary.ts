@@ -122,6 +122,8 @@ interface DictShape {
       searchButton: string;
       disableButton: string;
       enableButton: string;
+      resetPasswordButton: string;
+      resetPasswordPlaceholder: string;
       disabledBadge: string;
       inviteTitle: string;
       inviteDescription: string;
@@ -376,6 +378,8 @@ const dictionary: Record<Locale, DictShape> = {
         searchButton: "搜索",
         disableButton: "停用",
         enableButton: "启用",
+        resetPasswordButton: "重置密码",
+        resetPasswordPlaceholder: "新密码",
         disabledBadge: "已停用",
         inviteTitle: "邀请新成员",
         inviteDescription:
@@ -629,6 +633,8 @@ const dictionary: Record<Locale, DictShape> = {
         searchButton: "Search",
         disableButton: "Disable",
         enableButton: "Enable",
+        resetPasswordButton: "Reset password",
+        resetPasswordPlaceholder: "New password",
         disabledBadge: "Disabled",
         inviteTitle: "Invite a new member",
         inviteDescription:
