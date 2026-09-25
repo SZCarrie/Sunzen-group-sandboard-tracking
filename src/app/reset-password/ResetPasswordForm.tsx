@@ -19,18 +19,33 @@ export function ResetPasswordForm({ locale }: { locale: Locale }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (!code) {
-      setLinkInvalid(true);
+    const params = new URLSearchParams(window.location.search);
+    const tokenHash = params.get("token_hash");
+    const code = params.get("code");
+
+    if (tokenHash) {
+      supabase.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" }).then(({ error }) => {
+        if (error) {
+          setLinkInvalid(true);
+          return;
+        }
+        setReady(true);
+      });
       return;
     }
-    supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-      if (error) {
-        setLinkInvalid(true);
-        return;
-      }
-      setReady(true);
-    });
+
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
+        if (error) {
+          setLinkInvalid(true);
+          return;
+        }
+        setReady(true);
+      });
+      return;
+    }
+
+    setLinkInvalid(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
